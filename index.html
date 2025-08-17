@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stepworld Online - Présentation Interactive</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: "Pastel Neon" - A base of warm neutrals (bg-stone-100, text-gray-800) with vibrant, controlled accents of pink (rose-400), blue (sky-400), and green (emerald-400) to evoke the cyber-neon theme in a clean, professional manner. -->
+    <!-- Application Structure Plan: I've designed a single-page application with a fixed top navigation, functioning like tabs. This structure allows non-linear exploration, catering to different audiences. An investor might jump straight to "Modèle Éco", while a designer might explore "Univers". This is more effective than a linear document as it empowers the user to find information relevant to them instantly, improving engagement and comprehension. Key interactions include tab-switching to display content sections, and hover/click effects on cards and timeline elements to reveal details. -->
+    <!-- Visualization & Content Choices: 
+        - Core Loop: Goal: Explain daily user engagement. Method: Interactive cards for each step-chest, visually representing progression. Interaction: Hover effects on cards. Justification: More engaging than a simple list.
+        - Community (Clans/Squads): Goal: Showcase multiplayer benefits. Method: HTML/Tailwind diagrams for bonuses and a Chart.js Bar Chart to simulate a "Clan War". Interaction: The chart is dynamic. Justification: Visualizes the competitive aspect clearly.
+        - Roadmap: Goal: Present development plan. Method: A vertical timeline built with HTML/CSS. Interaction: Clickable version tabs to reveal features. Justification: More intuitive and organized than a flat list.
+        - Factions: Goal: Display visual choices. Method: Three styled cards with faction colors. Interaction: Hover effects. Justification: Immediately conveys the game's aesthetic identity.
+        - Library/Method: Chart.js for all charts (Canvas-based). All other visuals are pure HTML/Tailwind.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Tailwind's slate-50 */
+        }
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link.active {
+            border-bottom-color: #0ea5e9; /* sky-500 */
+            color: #020617; /* slate-900 */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <div class="min-h-screen flex flex-col">
+        <header class="sticky top-0 bg-white/80 backdrop-blur-lg shadow-sm z-10">
+            <div class="container mx-auto px-4">
+                <div class="flex justify-between items-center py-4">
+                    <h1 class="text-2xl font-bold text-slate-900">Stepworld Online</h1>
+                    <nav class="hidden md:flex space-x-6">
+                        <a href="#accueil" class="nav-link text-slate-600 font-semibold hover:text-slate-900 active">Vision</a>
+                        <a href="#le-jeu" class="nav-link text-slate-600 font-semibold hover:text-slate-900">Le Jeu</a>
+                        <a href="#communaute" class="nav-link text-slate-600 font-semibold hover:text-slate-900">Communauté</a>
+                        <a href="#univers" class="nav-link text-slate-600 font-semibold hover:text-slate-900">Univers</a>
+                        <a href="#monetisation" class="nav-link text-slate-600 font-semibold hover:text-slate-900">Modèle Éco</a>
+                        <a href="#roadmap" class="nav-link text-slate-600 font-semibold hover:text-slate-900">Roadmap</a>
+                    </nav>
+                     <div class="md:hidden">
+                        <select id="mobile-nav" class="bg-white border border-slate-300 rounded-md p-2 text-slate-800">
+                            <option value="accueil">Vision</option>
+                            <option value="le-jeu">Le Jeu</option>
+                            <option value="communaute">Communauté</option>
+                            <option value="univers">Univers</option>
+                            <option value="monetisation">Modèle Éco</option>
+                            <option value="roadmap">Roadmap</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-grow container mx-auto px-4 py-8 md:py-12">
+            
+            <section id="accueil" class="section active">
+                <div class="text-center">
+                    <h2 class="text-5xl md:text-7xl font-black tracking-tight text-slate-900">Marche IRL, domine en ligne.</h2>
+                    <p class="mt-6 max-w-3xl mx-auto text-lg text-slate-600">
+                        Stepworld Online est un **MMO de marche multijoueur** où votre nombre de pas dans le monde réel devient l'unique ressource du jeu. Plus vous marchez, plus vous progressez, et plus votre clan domine le classement. C'est une invitation à transformer l'activité physique en une aventure collective épique.
+                    </p>
+                </div>
+                <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <div class="text-3xl text-sky-500">🚶‍♂️</div>
+                        <h3 class="mt-4 text-xl font-bold">Activité Récompensée</h3>
+                        <p class="mt-2 text-slate-600">Chaque pas compte. Atteignez des paliers journaliers pour débloquer des coffres remplis de récompenses et de puzzles cosmétiques.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <div class="text-3xl text-rose-500">🤝</div>
+                        <h3 class="mt-4 text-xl font-bold">Force Collective</h3>
+                        <p class="mt-2 text-slate-600">Rejoignez une Escouade pour des bonus en temps réel ou un Clan pour participer à des guerres de pas hebdomadaires et remporter la gloire.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <div class="text-3xl text-emerald-500">🎨</div>
+                        <h3 class="mt-4 text-xl font-bold">Style Unique</h3>
+                        <p class="mt-2 text-slate-600">Personnalisez votre avatar dans un univers cyber-néon pastel. Choisissez votre faction et montrez vos couleurs.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="le-jeu" class="section">
+                <div class="text-center">
+                    <h2 class="text-4xl font-bold text-slate-900">Mécaniques de Jeu</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-slate-600">Cette section détaille la boucle de jeu principale, la progression du joueur et les fonctionnalités sociales qui forment le cœur de l'expérience Stepworld Online.</p>
+                </div>
+
+                <div class="mt-10">
+                    <h3 class="text-2xl font-bold text-center">Boucle de Jeu Journalière</h3>
+                    <p class="text-center text-slate-600 mt-2">Le cycle quotidien est simple, gratifiant et encourage une activité saine.</p>
+                    <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="p-4 bg-white rounded-lg shadow-sm border-l-4 border-sky-400">
+                            <h4 class="font-bold">1. Synchronisation</h4>
+                            <p class="text-sm text-slate-600">Ouvrez l'app. Vos pas sont récupérés via Google Fit / Apple Health toutes les 30 secondes.</p>
+                        </div>
+                        <div class="p-4 bg-white rounded-lg shadow-sm border-l-4 border-sky-400">
+                            <h4 class="font-bold">2. Objectifs & Coffres</h4>
+                            <p class="text-sm text-slate-600">Atteignez 7 paliers de pas (de 1k à 40k) pour débloquer 7 coffres de plus en plus précieux.</p>
+                        </div>
+                        <div class="p-4 bg-white rounded-lg shadow-sm border-l-4 border-sky-400">
+                            <h4 class="font-bold">3. Dépenses</h4>
+                            <p class="text-sm text-slate-600">Utilisez vos étoiles (la monnaie du jeu) pour acheter des cosmétiques ou des boosters dans la boutique.</p>
+                        </div>
+                        <div class="p-4 bg-white rounded-lg shadow-sm border-l-4 border-sky-400">
+                            <h4 class="font-bold">4. Social</h4>
+                            <p class="text-sm text-slate-600">Rejoignez une Escouade pour marcher en groupe et multiplier vos gains.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h3 class="text-2xl font-bold">Progression Personnelle</h3>
+                        <p class="mt-2 text-slate-600">La progression est directement liée à votre effort. Chaque pas vous rapproche du niveau supérieur et de nouvelles récompenses exclusives.</p>
+                        <ul class="mt-4 space-y-3">
+                            <li class="flex items-start"><span class="mr-2 text-emerald-500 font-bold">✔</span> <div><strong class="text-slate-800">Niveaux 1-100 :</strong> Débloqués uniquement en marchant.</div></li>
+                            <li class="flex items-start"><span class="mr-2 text-emerald-500 font-bold">✔</span> <div><strong class="text-slate-800">Cosmétiques :</strong> 10 tenues, 10 paires de chaussures, 10 couvre-chefs, 6 "trails" de pas et 4 mascottes à collectionner.</div></li>
+                            <li class="flex items-start"><span class="mr-2 text-emerald-500 font-bold">✔</span> <div><strong class="text-slate-800">Statistiques :</strong> Suivez vos performances (jour, semaine, mois, total) pour visualiser vos exploits.</div></li>
+                        </ul>
+                    </div>
+                     <div>
+                        <h3 class="text-2xl font-bold">Fonctionnalités Sociales</h3>
+                        <p class="mt-2 text-slate-600">Le jeu est plus amusant ensemble. Connectez-vous avec vos amis et défiez-les.</p>
+                        <ul class="mt-4 space-y-3">
+                            <li class="flex items-start"><span class="mr-2 text-rose-500 font-bold">✔</span> <div><strong class="text-slate-800">Liste d'amis :</strong> Ajoutez des amis via pseudo ou QR-code.</div></li>
+                            <li class="flex items-start"><span class="mr-2 text-rose-500 font-bold">✔</span> <div><strong class="text-slate-800">Défis personnels :</strong> Lancez des défis à vos amis, comme "10 000 pas avant 22h", avec notifications push.</div></li>
+                            <li class="flex items-start"><span class="mr-2 text-rose-500 font-bold">✔</span> <div><strong class="text-slate-800">Mini-Leaderboard :</strong> Comparez vos pas avec votre cercle d'amis.</div></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="communaute" class="section">
+                <div class="text-center">
+                    <h2 class="text-4xl font-bold text-slate-900">Le Pouvoir du Groupe</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-slate-600">L'interaction est au cœur de Stepworld Online. Les Escouades offrent une coopération en temps réel, tandis que les Clans se concentrent sur la compétition hebdomadaire.</p>
+                </div>
+
+                <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold text-rose-500">Escouade (Groupe de marche)</h3>
+                        <p class="mt-2 text-slate-600">Marchez ensemble, gagnez plus. Les escouades sont des groupes temporaires (6 max) pour des sessions de marche en temps réel.</p>
+                        <ul class="mt-4 space-y-2 text-sm">
+                            <li><strong>Création facile :</strong> Rejoignez via QR code ou lien.</li>
+                            <li><strong>Bonus de groupe :</strong> Multiplicateur d'étoiles gagnées (de x1.1 pour 2 joueurs à x1.3 pour 4+).</li>
+                            <li><strong>Vue live :</strong> Voyez les avatars de vos coéquipiers avancer à côté du vôtre sur un fond néon.</li>
+                            <li><strong>Chat rapide :</strong> Communiquez avec des emojis et phrases pré-codées.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold text-sky-500">Clan (Équipe permanente)</h3>
+                        <p class="mt-2 text-slate-600">Représentez votre clan et visez le sommet. Les clans (10 membres max) s'affrontent pour la domination.</p>
+                         <ul class="mt-4 space-y-2 text-sm">
+                            <li><strong>Bonus passif :</strong> +5% d'étoiles gagnées juste en étant dans un clan.</li>
+                            <li><strong>Leaderboards :</strong> Suivez votre classement (interne, national, global).</li>
+                            <li><strong>Guerre Hebdomadaire :</strong> Affrontez 3 autres clans chaque semaine. Le clan avec le plus de pas cumulés gagne.</li>
+                            <li><strong>Récompenses :</strong> Un skin exclusif et 50 000 étoiles à se partager pour les vainqueurs.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mt-12">
+                    <h3 class="text-2xl font-bold text-center">Simulation de Guerre de Clans</h3>
+                     <p class="text-center text-slate-600 mt-2">Visualisation d'un classement en milieu de semaine.</p>
+                    <div class="mt-4 chart-container">
+                        <canvas id="clanWarChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <section id="univers" class="section">
+                 <div class="text-center">
+                    <h2 class="text-4xl font-bold text-slate-900">Univers & Style Visuel</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-slate-600">Plongez dans un monde cyber-néon pastel, avec des villes futuristes nocturnes et des avatars chibi holographiques. Au niveau 10, vous choisirez une faction, un choix purement cosmétique pour affirmer votre style.</p>
+                </div>
+
+                <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="border-2 border-rose-400 bg-rose-50 p-6 rounded-xl text-center shadow-lg transform hover:scale-105 transition-transform">
+                        <div class="w-16 h-16 rounded-full bg-rose-400 mx-auto mb-4"></div>
+                        <h3 class="text-2xl font-bold text-rose-800">Neon Pulse</h3>
+                        <p class="mt-2 text-rose-700">La faction de l'énergie et de la passion, baignée dans une lueur rose vibrante.</p>
+                    </div>
+                     <div class="border-2 border-sky-400 bg-sky-50 p-6 rounded-xl text-center shadow-lg transform hover:scale-105 transition-transform">
+                        <div class="w-16 h-16 rounded-full bg-sky-400 mx-auto mb-4"></div>
+                        <h3 class="text-2xl font-bold text-sky-800">Voltage</h3>
+                        <p class="mt-2 text-sky-700">Le courant de la technologie et de la précision, représenté par un bleu électrique perçant.</p>
+                    </div>
+                     <div class="border-2 border-emerald-400 bg-emerald-50 p-6 rounded-xl text-center shadow-lg transform hover:scale-105 transition-transform">
+                        <div class="w-16 h-16 rounded-full bg-emerald-400 mx-auto mb-4"></div>
+                        <h3 class="text-2xl font-bold text-emerald-800">Ghost Byte</h3>
+                        <p class="mt-2 text-emerald-700">L'esprit de la discrétion et du mystère, incarné par un vert spectral énigmatique.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="monetisation" class="section">
+                <div class="text-center">
+                    <h2 class="text-4xl font-bold text-slate-900">Modèle Économique</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-slate-600">Nous croyons en une monétisation juste et non-intrusive. Le cœur du jeu est et restera gratuit. Nos options payantes sont conçues pour améliorer l'expérience, sans jamais offrir d'avantage compétitif direct ("pay-to-win").</p>
+                </div>
+
+                <div class="mt-10 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white p-8 rounded-xl shadow-xl border-t-4 border-emerald-500">
+                        <h3 class="text-2xl font-bold">Pass Premium (2€)</h3>
+                        <p class="mt-2 text-slate-600">Une offre unique pour les joueurs les plus engagés.</p>
+                        <ul class="mt-4 space-y-2">
+                            <li class="flex items-center"><span class="text-emerald-500 mr-3">✓</span> +20% d'étoiles sur tous les gains</li>
+                            <li class="flex items-center"><span class="text-emerald-500 mr-3">✓</span> Aucune publicité (bannières)</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-xl border-t-4 border-slate-400">
+                        <h3 class="text-2xl font-bold">Publicités Optionnelles</h3>
+                        <p class="mt-2 text-slate-600">Pour les joueurs qui souhaitent un coup de pouce sans dépenser.</p>
+                        <ul class="mt-4 space-y-2">
+                            <li class="flex items-center"><span class="text-slate-500 mr-3">✓</span> Bannière publicitaire uniquement dans le shop (retirée avec le pass).</li>
+                            <li class="flex items-center"><span class="text-slate-500 mr-3">✓</span> Regarder une pub (1 min) pour un boost de +10% d'étoiles pour la journée.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="roadmap" class="section">
+                <div class="text-center">
+                    <h2 class="text-4xl font-bold text-slate-900">Roadmap de Développement</h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-slate-600">Notre développement est structuré en versions claires, permettant une livraison rapide et itérative des fonctionnalités clés. Voici le plan pour le lancement initial.</p>
+                </div>
+
+                <div class="mt-12 max-w-3xl mx-auto">
+                    <div class="relative">
+                        <div class="absolute left-1/2 -translate-x-1/2 w-1 h-full bg-slate-200 rounded"></div>
+                        <div id="roadmap-content" class="space-y-12">
+                            <!-- Roadmap items will be injected by JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const mobileNav = document.getElementById('mobile-nav');
+
+            function showSection(id) {
+                sections.forEach(section => {
+                    if (section.id === id) {
+                        section.classList.add('active');
+                    } else {
+                        section.classList.remove('active');
+                    }
+                });
+            }
+
+            function updateNav(id) {
+                navLinks.forEach(link => {
+                    if (link.getAttribute('href') === '#' + id) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+                mobileNav.value = id;
+            }
+
+            function handleNavigation(event) {
+                event.preventDefault();
+                const id = this.getAttribute('href').substring(1);
+                showSection(id);
+                updateNav(id);
+                window.scrollTo(0, 0);
+            }
+            
+            navLinks.forEach(link => link.addEventListener('click', handleNavigation));
+
+            mobileNav.addEventListener('change', function() {
+                const id = this.value;
+                showSection(id);
+                updateNav(id);
+                window.scrollTo(0, 0);
+            });
+
+            showSection('accueil');
+
+            const clanWarCtx = document.getElementById('clanWarChart');
+            if(clanWarCtx) {
+                new Chart(clanWarCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Votre Clan', 'Clan Alpha', 'Clan Beta', 'Clan Gamma'],
+                        datasets: [{
+                            label: 'Total des pas (en millions)',
+                            data: [12.5, 11.8, 9.2, 8.9],
+                            backgroundColor: [
+                                'rgba(56, 189, 248, 0.6)', // sky-400
+                                'rgba(244, 63, 94, 0.6)', // rose-500
+                                'rgba(16, 185, 129, 0.6)', // emerald-500
+                                'rgba(107, 114, 128, 0.6)' // gray-500
+                            ],
+                            borderColor: [
+                                'rgba(56, 189, 248, 1)',
+                                'rgba(244, 63, 94, 1)',
+                                'rgba(16, 185, 129, 1)',
+                                'rgba(107, 114, 128, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            title: { display: true, text: 'Guerre de Clans - Jour 4/7' }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: { display: true, text: 'Pas (en millions)' }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            const roadmapData = [
+                { version: 'V0 - Base', features: ['Authentification', 'Enregistrer ses pas', 'Consulter son historique', 'Créer une escouade', 'Créer un clan'], align: 'left' },
+                { version: 'V1 - Économie', features: ['Système de monnaie (étoiles)', 'Boutique en jeu', 'Objectifs journaliers', 'Historique des escouades', 'Visuel de l\'avatar qui marche'], align: 'right' },
+                { version: 'V2 - Multijoueur', features: ['Système d\'amitié', 'Leaderboards (clan, amis, région)', 'Statistiques personnelles', 'Chat de clan', 'Guerre de clan'], align: 'left' },
+                { version: 'V3 - Finalisation', features: ['Boosts de points', 'Avatars de groupe en temps réel', 'Objectifs journaliers aléatoires', 'Système de notifications'], align: 'right' }
+            ];
+
+            const roadmapContainer = document.getElementById('roadmap-content');
+            if (roadmapContainer) {
+                roadmapData.forEach(item => {
+                    const featuresHtml = item.features.map(f => `<li class="text-sm text-slate-600">${f}</li>`).join('');
+                    const alignmentClass = item.align === 'left' ? 'md:mr-auto' : 'md:ml-auto';
+                    const itemHtml = `
+                        <div class="relative flex items-center ${item.align === 'right' ? 'md:flex-row-reverse' : ''}">
+                            <div class="hidden md:block w-1/2"></div>
+                            <div class="hidden md:block absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-sky-500 z-10"></div>
+                            <div class="w-full md:w-1/2 bg-white p-4 rounded-lg shadow-md ${alignmentClass}">
+                                <h4 class="font-bold text-lg text-sky-600">${item.version}</h4>
+                                <ul class="mt-2 space-y-1 list-disc list-inside">${featuresHtml}</ul>
+                            </div>
+                        </div>
+                    `;
+                    roadmapContainer.innerHTML += itemHtml;
+                });
+            }
+        });
+    </script>
+</body>
+</html>
